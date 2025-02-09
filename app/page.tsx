@@ -1,3 +1,4 @@
+/* eslint-disable @next/next/no-img-element */
 import React from "react";
 
 const Home = () => {
@@ -51,7 +52,7 @@ const Home = () => {
         </div>
 
         {/* Uploading Section */}
-        <div className="mt-6 md:mt-10 w-full">
+        <div className="mt-6 md:mt-10 lg:w-[400px] w-full">
           <p className="text-left text-neutral-300 mb-3 text-sm md:text-base">Upload Avatar</p>
           <div className="border border-dashed border-gray-300 px-6 py-4 md:px-10 md:py-6 rounded-lg text-center">
             <img
@@ -112,7 +113,7 @@ const Home = () => {
               />
             </div>
           </div>
-          <button className="mt-6 md:mt-8 w-full bg-orange-500 text-neutral-100 text-sm md:text-base font-bold py-2 rounded-lg hover:bg-orange-600">
+          <button className="mt-6 md:mt-8 w-full bg-orange-500 text-black text-sm md:text-base font-bold py-2 rounded-lg hover:bg-orange-600">
             Generate My Ticket
           </button>
         </div>
