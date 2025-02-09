@@ -1,0 +1,22 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@font-face {
+  font-family: 'Inconsolata';
+  src: url('/assets/fonts/Inconsolata-Regular.ttf') format('truetype'),
+       url('/assets/fonts/Inconsolata-Bold.ttf') format('truetype');
+  font-weight: 400 700;
+  font-style: normal;
+}
+
+@font-face {
+  font-family: 'Inconsolata';
+  src: url('/assets/fonts/Inconsolata-ExtraBold.ttf') format('truetype');
+  font-weight: 800;
+  font-style: normal;
+}
+
+html {
+  font-family: 'Inconsolata', sans-serif;
+}
