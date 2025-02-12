@@ -1,7 +1,7 @@
 /* eslint-disable @next/next/no-img-element */
 import React from "react";
 
-const page = () => {
+const cardpage = () => {
   return (
     <div className="flex flex-col items-center px-6 md:px-16 lg:px-32 bg-cover bg-[url('/assets/images/background-desktop.png')] min-h-screen text-neutral-100 font-inconsolata relative">
       {/* Top Right Corner SVG */}
@@ -92,4 +92,4 @@ const page = () => {
   );
 };
 
-export default page;
+export default cardpage;
