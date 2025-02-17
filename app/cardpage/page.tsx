@@ -1,9 +1,9 @@
 /* eslint-disable @next/next/no-img-element */
 'use client'
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useState, Suspense } from "react";
 import { useSearchParams } from 'next/navigation';
 
-const Card = () => {
+const CardContent = () => {
   const searchParams = useSearchParams();
   const [queryParams, setQueryParams] = useState({
     fullName: "",
@@ -115,18 +115,26 @@ const Card = () => {
           />
           <p className="text-left mt-2 mb-6 text-neutral-500">Jan 31, 2025 / Austin, TX</p>
           <div className="pt-10 flex gap-5 items-center mb-7">
-        <img src={queryParams.avatar} className="w-16 h-16 rounded-lg" alt="Avatar" />
-        <div className="flex flex-col">
-          <h1 className="text-left font-bold text-xl">{queryParams.fullName}</h1>
-          <p className="flex items-center gap-2">
-            <img src="/assets/images/icon-github.svg" alt="github" className="w-5 h-5" />
-            <span>{queryParams.githubUsername}</span>
-          </p>
+            <img src={queryParams.avatar} className="w-16 h-16 rounded-lg" alt="Avatar" />
+            <div className="flex flex-col">
+              <h1 className="text-left font-bold text-xl">{queryParams.fullName}</h1>
+              <p className="flex items-center gap-2">
+                <img src="/assets/images/icon-github.svg" alt="github" className="w-5 h-5" />
+                <span>{queryParams.githubUsername}</span>
+              </p>
+            </div>
+          </div>
         </div>
       </div>
     </div>
-      </div>
-    </div>
+  );
+};
+
+const Card = () => {
+  return (
+    <Suspense fallback={<div>Loading...</div>}>
+      <CardContent />
+    </Suspense>
   );
 };
 

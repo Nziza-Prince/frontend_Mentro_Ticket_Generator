@@ -1,6 +1,6 @@
 /* eslint-disable @next/next/no-img-element */
 'use client'
-import React, { SetStateAction, useState } from "react";
+import React, {  useState } from "react";
 import { useRouter } from "next/navigation";
 
 const Home = () => {
@@ -8,12 +8,13 @@ const Home = () => {
   const [fullName, setFullName] = useState("");
   const [email, setEmail] = useState("");
   const [githubUsername, setGithubUsername] = useState("");
-  const [avatar, setAvatar] = useState(null);
+  const [avatar, setAvatar] = useState<File | null>(null);
   const [error, setError] = useState("");
-  const [imagePreview, setImagePreview] = useState(null);
+  const [imagePreview, setImagePreview] = useState<string | null>(null);
+  const [emailError, setEmailError] = useState("");
 
-  const handleImageUpload = (e) => {
-    const file = e.target.files[0];
+  const handleImageUpload = (e:React.ChangeEvent<HTMLInputElement>) => {
+    const file = e.target.files?.[0];
     if (file && (file.type === "image/jpeg" || file.type === "image/png")) {
       setAvatar(file);
       setImagePreview(URL.createObjectURL(file))
@@ -27,10 +28,19 @@ const Home = () => {
     setAvatar(null);
     setImagePreview(null);
   };
+  const validateEmail = (email: string) => {
+    const re = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+    return re.test(String(email).toLowerCase());
+  };
 
-  const handleSubmit = (e) => {
+  const handleSubmit = (e:React.MouseEvent<HTMLButtonElement>) => {
     e.preventDefault();
-  
+    setEmailError("");
+   
+  if (!validateEmail(email)) {
+      setEmailError("Please enter a valid email address.");
+      
+    }
     if (!fullName || !email || !githubUsername || !avatar) {
       setError("Please fill all fields and upload an image.");
       return;
@@ -106,7 +116,7 @@ const Home = () => {
                 />
                 <div className="flex justify-center gap-2">
                   <button
-                    onClick={() => document.getElementById('avatar-upload').click()}
+                    onClick={() => document.getElementById('avatar-upload')?.click()}
                     className="text-sm bg-neutral-600 text-white px-5 py-1 hover:bg-neutral-700"
                   >
                     Change
@@ -178,6 +188,7 @@ const Home = () => {
                 value={email}
                 onChange={(e) => setEmail(e.target.value)}
               />
+              {emailError && <p className="text-red-500 text-sm mt-2">{emailError}</p>}
             </div>
             <div className="flex flex-col mb-4 gap-2">
               <label
