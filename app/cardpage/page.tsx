@@ -1,11 +1,10 @@
 /* eslint-disable @next/next/no-img-element */
 'use client'
-import React from "react";
-import { useRouter } from "next/navigation";
-import { useEffect, useState } from "react";
+import React, { useEffect, useState } from "react";
+import { useSearchParams } from 'next/navigation';
 
 const Card = () => {
-  const router = useRouter();
+  const searchParams = useSearchParams();
   const [queryParams, setQueryParams] = useState({
     fullName: "",
     email: "",
@@ -14,9 +13,12 @@ const Card = () => {
   });
 
   useEffect(() => {
-    if (router.isReady) {
-      // Extract query parameters from the URL
-      const { fullName, email, githubUsername, avatar } = router.query;
+    if (searchParams) {
+      const fullName = searchParams.get('fullName');
+      const email = searchParams.get('email');
+      const githubUsername = searchParams.get('githubUsername');
+      const avatar = searchParams.get('avatar');
+
       setQueryParams({
         fullName: fullName || "",
         email: email || "",
@@ -24,7 +26,7 @@ const Card = () => {
         avatar: avatar || "",
       });
     }
-  }, [router.isReady, router.query]);
+  }, [searchParams]);
 
   // Handle missing query parameters
   if (!queryParams.fullName || !queryParams.email || !queryParams.githubUsername || !queryParams.avatar) {
@@ -85,7 +87,7 @@ const Card = () => {
           <h1 className="font-bold text-2xl md:text-3xl lg:text-4xl mt-6 md:mt-10 mb-4 md:mb-6">
             Congrats,{" "}
             <span className="bg-text-gradient text-transparent bg-clip-text">
-              {fullName}!
+              {queryParams.fullName}!
             </span>
           </h1>
           <h1 className="font-bold text-2xl md:text-3xl lg:text-4xl mb-4 md:mb-6">
@@ -96,7 +98,7 @@ const Card = () => {
               Weve emailed your ticket to
             </p>
             <p className="text-neutral-500 text-sm md:text-base">
-              <span className="text-orange-700">{email}</span> and
+              <span className="text-orange-700">{queryParams.email}</span> and
               will send updates in
             </p>
             <p className="mb-5 text-neutral-500 text-sm md:text-base">
