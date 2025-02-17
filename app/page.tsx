@@ -1,7 +1,43 @@
 /* eslint-disable @next/next/no-img-element */
-import React from "react";
+'use client'
+import React, { useState } from "react";
+import { useRouter } from "next/navigation";
 
 const Home = () => {
+  const router = useRouter();
+  const [fullName, setFullName] = useState("");
+  const [email, setEmail] = useState("");
+  const [githubUsername, setGithubUsername] = useState("");
+  const [avatar, setAvatar] = useState(null);
+  const [error, setError] = useState("");
+
+  const handleImageUpload = (e) => {
+    const file = e.target.files[0];
+    if (file && (file.type === "image/jpeg" || file.type === "image/png") && file.size <= 500000) {
+      setAvatar(file);
+      setError("");
+    } else {
+      setError("Please upload a valid JPG or PNG image under 500KB.");
+    }
+  };
+
+  const handleSubmit = (e) => {
+    e.preventDefault();
+  
+    // Validate form fields
+    if (!fullName || !email || !githubUsername || !avatar) {
+      setError("Please fill all fields and upload an image.");
+      return;
+    }
+  
+    // Create a URL for the uploaded image
+    const avatarUrl = URL.createObjectURL(avatar);
+  
+    // Redirect to the card page with query parameters
+    router.push(
+      `/cardpage?fullName=${encodeURIComponent(fullName)}&email=${encodeURIComponent(email)}&githubUsername=${encodeURIComponent(githubUsername)}&avatar=${encodeURIComponent(avatarUrl)}`
+    );
+  };
   return (
     <div className="flex flex-col items-center px-6 md:px-16 lg:px-32 bg-cover bg-[url('/assets/images/background-desktop.png')] h-screen text-neutral-100 font-inconsolata relative">
       {/* Top Right Corner SVG */}
@@ -55,15 +91,25 @@ const Home = () => {
         <div className="mt-6 md:mt-10 lg:w-[400px] w-full">
           <p className="text-left text-neutral-300 mb-3 text-sm md:text-base">Upload Avatar</p>
           <div className="border border-dashed border-gray-300 px-6 py-4 md:px-10 md:py-6 rounded-lg text-center">
-            <img
-              src="/assets/images/icon-upload.svg"
-              alt="upload"
-              className="mx-auto mb-3 bg-gray-600 p-3 rounded-lg cursor-pointer"
+            <label htmlFor="avatar-upload">
+              <img
+                src="/assets/images/icon-upload.svg"
+                alt="upload"
+                className="mx-auto mb-3 bg-gray-600 p-3 rounded-lg cursor-pointer"
+              />
+              <p className="text-neutral-300 text-sm md:text-base">
+                Drag and drop or click to upload
+              </p>
+            </label>
+            <input
+              id="avatar-upload"
+              type="file"
+              accept="image/jpeg, image/png"
+              onChange={handleImageUpload}
+              className="hidden"
             />
-            <p className="text-neutral-300 text-sm md:text-base">
-              Drag and drop or click to upload
-            </p>
           </div>
+          {error && <p className="text-red-500 text-sm mt-2">{error}</p>}
           <p className="text-xs md:text-sm text-left text-neutral-300 mt-3">
             <img
               src="/assets/images/icon-info.svg"
@@ -84,6 +130,8 @@ const Home = () => {
               <input
                 className="text-neutral-600 text-sm md:text-base indent-3 focus:outline-none bg-transparent h-10 rounded-lg border border-gray-500"
                 type="text"
+                value={fullName}
+                onChange={(e) => setFullName(e.target.value)}
               />
             </div>
             <div className="flex flex-col mb-4 gap-2">
@@ -97,6 +145,8 @@ const Home = () => {
                 className="text-neutral-600 text-sm md:text-base indent-3 focus:outline-none bg-transparent h-10 rounded-lg border border-gray-500"
                 type="email"
                 placeholder="example@email.com"
+                value={email}
+                onChange={(e) => setEmail(e.target.value)}
               />
             </div>
             <div className="flex flex-col mb-4 gap-2">
@@ -110,10 +160,15 @@ const Home = () => {
                 className="text-neutral-600 text-sm md:text-base indent-3 focus:outline-none bg-transparent h-10 rounded-lg border border-gray-500"
                 type="text"
                 placeholder="@yourusername"
+                value={githubUsername}
+                onChange={(e) => setGithubUsername(e.target.value)}
               />
             </div>
           </div>
-          <button className="mt-6 md:mt-8 w-full bg-orange-500 text-black text-sm md:text-base font-bold py-2 rounded-lg hover:bg-orange-600">
+          <button
+            className="mt-6 md:mt-8 w-full bg-orange-500 text-black text-sm md:text-base font-bold py-2 rounded-lg hover:bg-orange-600"
+            onClick={handleSubmit}
+          >
             Generate My Ticket
           </button>
         </div>

@@ -1,7 +1,43 @@
 /* eslint-disable @next/next/no-img-element */
+'use client'
 import React from "react";
+import { useRouter } from "next/navigation";
+import { useEffect, useState } from "react";
 
-const page = () => {
+const Card = () => {
+  const router = useRouter();
+  const [queryParams, setQueryParams] = useState({
+    fullName: "",
+    email: "",
+    githubUsername: "",
+    avatar: "",
+  });
+
+  useEffect(() => {
+    if (router.isReady) {
+      // Extract query parameters from the URL
+      const { fullName, email, githubUsername, avatar } = router.query;
+      setQueryParams({
+        fullName: fullName || "",
+        email: email || "",
+        githubUsername: githubUsername || "",
+        avatar: avatar || "",
+      });
+    }
+  }, [router.isReady, router.query]);
+
+  // Handle missing query parameters
+  if (!queryParams.fullName || !queryParams.email || !queryParams.githubUsername || !queryParams.avatar) {
+    return (
+      <div className="flex flex-col items-center justify-center min-h-screen text-neutral-100 font-inconsolata">
+        <h1 className="text-2xl font-bold">Oops! Something went wrong.</h1>
+        <p className="mt-4 text-neutral-500">
+          Please go back and fill out the form to generate your ticket.
+        </p>
+      </div>
+    );
+  }
+
   return (
     <div className="flex flex-col items-center px-6 md:px-16 lg:px-32 bg-cover bg-[url('/assets/images/background-desktop.png')] min-h-screen text-neutral-100 font-inconsolata relative">
       {/* Top Right Corner SVG */}
@@ -49,7 +85,7 @@ const page = () => {
           <h1 className="font-bold text-2xl md:text-3xl lg:text-4xl mt-6 md:mt-10 mb-4 md:mb-6">
             Congrats,{" "}
             <span className="bg-text-gradient text-transparent bg-clip-text">
-              Jonatan Kristof !
+              {fullName}!
             </span>
           </h1>
           <h1 className="font-bold text-2xl md:text-3xl lg:text-4xl mb-4 md:mb-6">
@@ -60,7 +96,7 @@ const page = () => {
               Weve emailed your ticket to
             </p>
             <p className="text-neutral-500 text-sm md:text-base">
-              <span className="text-orange-700">Jonatan@email.com</span> and
+              <span className="text-orange-700">{email}</span> and
               will send updates in
             </p>
             <p className="mb-5 text-neutral-500 text-sm md:text-base">
@@ -77,19 +113,19 @@ const page = () => {
           />
           <p className="text-center mt-2 mb-6 text-neutral-500">Jan 31, 2025 / Austin, TX</p>
           <div className="flex gap-3 items-center">
-            <img src="/assets/images/image-avatar.jpg" className="w-16 h-16 rounded-lg" alt="Avatar" />
-            <div className="flex flex-col">
-              <h1 className="text-left font-bold">Jonatan Kristof</h1>
-              <p className="flex items-center gap-2">
-                <img src="/assets/images/icon-github.svg" alt="github" className="w-4 h-4" />
-                <span>@jonatankristof0101</span>
-              </p>
-            </div>
-          </div>
+        <img src={queryParams.avatar} className="w-16 h-16 rounded-lg" alt="Avatar" />
+        <div className="flex flex-col">
+          <h1 className="text-left font-bold">{queryParams.fullName}</h1>
+          <p className="flex items-center gap-2">
+            <img src="/assets/images/icon-github.svg" alt="github" className="w-4 h-4" />
+            <span>{queryParams.githubUsername}</span>
+          </p>
         </div>
+      </div>
+    </div>
       </div>
     </div>
   );
 };
 
-export default page;
+export default Card;
