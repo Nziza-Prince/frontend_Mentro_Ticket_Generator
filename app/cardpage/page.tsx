@@ -111,15 +111,15 @@ const Card = () => {
           <img
             src="/assets/images/logo-full.svg"
             alt="Logo"
-            className="w-24 mx-auto"
+            className="w-72"
           />
-          <p className="text-center mt-2 mb-6 text-neutral-500">Jan 31, 2025 / Austin, TX</p>
-          <div className="flex gap-3 items-center">
+          <p className="text-left mt-2 mb-6 text-neutral-500">Jan 31, 2025 / Austin, TX</p>
+          <div className="pt-10 flex gap-5 items-center mb-7">
         <img src={queryParams.avatar} className="w-16 h-16 rounded-lg" alt="Avatar" />
         <div className="flex flex-col">
-          <h1 className="text-left font-bold">{queryParams.fullName}</h1>
+          <h1 className="text-left font-bold text-xl">{queryParams.fullName}</h1>
           <p className="flex items-center gap-2">
-            <img src="/assets/images/icon-github.svg" alt="github" className="w-4 h-4" />
+            <img src="/assets/images/icon-github.svg" alt="github" className="w-5 h-5" />
             <span>{queryParams.githubUsername}</span>
           </p>
         </div>

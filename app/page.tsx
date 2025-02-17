@@ -1,6 +1,6 @@
 /* eslint-disable @next/next/no-img-element */
 'use client'
-import React, { useState } from "react";
+import React, { SetStateAction, useState } from "react";
 import { useRouter } from "next/navigation";
 
 const Home = () => {
@@ -10,34 +10,39 @@ const Home = () => {
   const [githubUsername, setGithubUsername] = useState("");
   const [avatar, setAvatar] = useState(null);
   const [error, setError] = useState("");
+  const [imagePreview, setImagePreview] = useState(null);
 
   const handleImageUpload = (e) => {
     const file = e.target.files[0];
-    if (file && (file.type === "image/jpeg" || file.type === "image/png") && file.size <= 500000) {
+    if (file && (file.type === "image/jpeg" || file.type === "image/png")) {
       setAvatar(file);
+      setImagePreview(URL.createObjectURL(file))
       setError("");
     } else {
       setError("Please upload a valid JPG or PNG image under 500KB.");
     }
   };
 
+  const handleRemoveImage = () => {
+    setAvatar(null);
+    setImagePreview(null);
+  };
+
   const handleSubmit = (e) => {
     e.preventDefault();
   
-    // Validate form fields
     if (!fullName || !email || !githubUsername || !avatar) {
       setError("Please fill all fields and upload an image.");
       return;
     }
   
-    // Create a URL for the uploaded image
     const avatarUrl = URL.createObjectURL(avatar);
   
-    // Redirect to the card page with query parameters
     router.push(
       `/cardpage?fullName=${encodeURIComponent(fullName)}&email=${encodeURIComponent(email)}&githubUsername=${encodeURIComponent(githubUsername)}&avatar=${encodeURIComponent(avatarUrl)}`
     );
   };
+
   return (
     <div className="flex flex-col items-center px-6 md:px-16 lg:px-32 bg-cover bg-[url('/assets/images/background-desktop.png')] h-screen text-neutral-100 font-inconsolata relative">
       {/* Top Right Corner SVG */}
@@ -91,16 +96,41 @@ const Home = () => {
         <div className="mt-6 md:mt-10 lg:w-[400px] w-full">
           <p className="text-left text-neutral-300 mb-3 text-sm md:text-base">Upload Avatar</p>
           <div className="border border-dashed border-gray-300 px-6 py-4 md:px-10 md:py-6 rounded-lg text-center">
-            <label htmlFor="avatar-upload">
-              <img
-                src="/assets/images/icon-upload.svg"
-                alt="upload"
-                className="mx-auto mb-3 bg-gray-600 p-3 rounded-lg cursor-pointer"
-              />
-              <p className="text-neutral-300 text-sm md:text-base">
-                Drag and drop or click to upload
-              </p>
-            </label>
+            {imagePreview ? (
+              <div className="relative">
+                <img
+                  src={imagePreview}
+                  alt="Preview"
+                  className="mx-auto mb-3 rounded-lg"
+                  style={{ maxWidth: "20%", maxHeight: "200px" }}
+                />
+                <div className="flex justify-center gap-2">
+                  <button
+                    onClick={() => document.getElementById('avatar-upload').click()}
+                    className="text-sm bg-neutral-600 text-white px-5 py-1 hover:bg-neutral-700"
+                  >
+                    Change
+                  </button>
+                  <button
+                    onClick={handleRemoveImage}
+                    className="text-sm bg-neutral-600 text-white px-5 py-1 hover:undeline"
+                  >
+                    Remove
+                  </button>
+                </div>
+              </div>
+            ) : (
+              <label htmlFor="avatar-upload">
+                <img
+                  src="/assets/images/icon-upload.svg"
+                  alt="upload"
+                  className="mx-auto mb-3 bg-gray-600 p-3 rounded-lg cursor-pointer"
+                />
+                <p className="text-neutral-300 text-sm md:text-base">
+                  Drag and drop or click to upload
+                </p>
+              </label>
+            )}
             <input
               id="avatar-upload"
               type="file"
@@ -128,7 +158,7 @@ const Home = () => {
                 Full Name
               </label>
               <input
-                className="text-neutral-600 text-sm md:text-base indent-3 focus:outline-none bg-transparent h-10 rounded-lg border border-gray-500"
+                className="text-neutral-200 text-sm md:text-base indent-3 focus:outline-none bg-transparent h-10 rounded-lg border border-gray-500"
                 type="text"
                 value={fullName}
                 onChange={(e) => setFullName(e.target.value)}
@@ -142,7 +172,7 @@ const Home = () => {
                 Email Address
               </label>
               <input
-                className="text-neutral-600 text-sm md:text-base indent-3 focus:outline-none bg-transparent h-10 rounded-lg border border-gray-500"
+                className="text-neutral-200 text-sm md:text-base indent-3 focus:outline-none bg-transparent h-10 rounded-lg border border-gray-500"
                 type="email"
                 placeholder="example@email.com"
                 value={email}
@@ -157,7 +187,7 @@ const Home = () => {
                 GitHub Username
               </label>
               <input
-                className="text-neutral-600 text-sm md:text-base indent-3 focus:outline-none bg-transparent h-10 rounded-lg border border-gray-500"
+                className="text-neutral-200 text-sm md:text-base indent-3 focus:outline-none bg-transparent h-10 rounded-lg border border-gray-500"
                 type="text"
                 placeholder="@yourusername"
                 value={githubUsername}
