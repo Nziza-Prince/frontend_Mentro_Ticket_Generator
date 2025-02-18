@@ -1,7 +1,7 @@
 /* eslint-disable @next/next/no-img-element */
-'use client'
+"use client";
 import React, { useEffect, useState, Suspense } from "react";
-import { useSearchParams } from 'next/navigation';
+import { useSearchParams } from "next/navigation";
 
 const CardContent = () => {
   const searchParams = useSearchParams();
@@ -14,10 +14,10 @@ const CardContent = () => {
 
   useEffect(() => {
     if (searchParams) {
-      const fullName = searchParams.get('fullName');
-      const email = searchParams.get('email');
-      const githubUsername = searchParams.get('githubUsername');
-      const avatar = searchParams.get('avatar');
+      const fullName = searchParams.get("fullName");
+      const email = searchParams.get("email");
+      const githubUsername = searchParams.get("githubUsername");
+      const avatar = searchParams.get("avatar");
 
       setQueryParams({
         fullName: fullName || "",
@@ -29,7 +29,12 @@ const CardContent = () => {
   }, [searchParams]);
 
   // Handle missing query parameters
-  if (!queryParams.fullName || !queryParams.email || !queryParams.githubUsername || !queryParams.avatar) {
+  if (
+    !queryParams.fullName ||
+    !queryParams.email ||
+    !queryParams.githubUsername ||
+    !queryParams.avatar
+  ) {
     return (
       <div className="flex flex-col items-center justify-center min-h-screen text-neutral-100 font-inconsolata">
         <h1 className="text-2xl font-bold">Oops! Something went wrong.</h1>
@@ -108,18 +113,26 @@ const CardContent = () => {
         </div>
 
         <div className="bg-cover w-full bg-[url('/assets/images/pattern-ticket.svg')] mt-10 p-5 rounded-lg">
-          <img
-            src="/assets/images/logo-full.svg"
-            alt="Logo"
-            className="w-72"
-          />
-          <p className="text-left mt-2 mb-6 text-neutral-500">Jan 31, 2025 / Austin, TX</p>
+          <img src="/assets/images/logo-full.svg" alt="Logo" className="w-72" />
+          <p className="text-left mt-2 mb-6 text-neutral-500">
+            Jan 31, 2025 / Austin, TX
+          </p>
           <div className="pt-10 flex gap-5 items-center mb-7">
-            <img src={queryParams.avatar} className="w-16 h-16 rounded-lg" alt="Avatar" />
+            <img
+              src={queryParams.avatar}
+              className="w-16 h-16 rounded-lg"
+              alt="Avatar"
+            />
             <div className="flex flex-col">
-              <h1 className="text-left font-bold text-xl">{queryParams.fullName}</h1>
+              <h1 className="text-left font-bold text-xl">
+                {queryParams.fullName}
+              </h1>
               <p className="flex items-center gap-2">
-                <img src="/assets/images/icon-github.svg" alt="github" className="w-5 h-5" />
+                <img
+                  src="/assets/images/icon-github.svg"
+                  alt="github"
+                  className="w-5 h-5"
+                />
                 <span>{queryParams.githubUsername}</span>
               </p>
             </div>

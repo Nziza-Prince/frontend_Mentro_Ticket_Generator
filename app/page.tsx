@@ -1,6 +1,6 @@
 /* eslint-disable @next/next/no-img-element */
 'use client'
-import React, {  useState } from "react";
+import React, { useState } from "react";
 import { useRouter } from "next/navigation";
 
 const Home = () => {
@@ -13,11 +13,11 @@ const Home = () => {
   const [imagePreview, setImagePreview] = useState<string | null>(null);
   const [emailError, setEmailError] = useState("");
 
-  const handleImageUpload = (e:React.ChangeEvent<HTMLInputElement>) => {
+  const handleImageUpload = (e: React.ChangeEvent<HTMLInputElement>) => {
     const file = e.target.files?.[0];
     if (file && (file.type === "image/jpeg" || file.type === "image/png")) {
       setAvatar(file);
-      setImagePreview(URL.createObjectURL(file))
+      setImagePreview(URL.createObjectURL(file));
       setError("");
     } else {
       setError("Please upload a valid JPG or PNG image under 500KB.");
@@ -28,26 +28,29 @@ const Home = () => {
     setAvatar(null);
     setImagePreview(null);
   };
+
   const validateEmail = (email: string) => {
     const re = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
     return re.test(String(email).toLowerCase());
   };
 
-  const handleSubmit = (e:React.MouseEvent<HTMLButtonElement>) => {
+  const handleSubmit = (e: React.MouseEvent<HTMLButtonElement>) => {
     e.preventDefault();
     setEmailError("");
-   
-  if (!validateEmail(email)) {
+    setError("");
+
+    if (!validateEmail(email)) {
       setEmailError("Please enter a valid email address.");
-      
+      return;
     }
+
     if (!fullName || !email || !githubUsername || !avatar) {
       setError("Please fill all fields and upload an image.");
       return;
     }
-  
+
     const avatarUrl = URL.createObjectURL(avatar);
-  
+
     router.push(
       `/cardpage?fullName=${encodeURIComponent(fullName)}&email=${encodeURIComponent(email)}&githubUsername=${encodeURIComponent(githubUsername)}&avatar=${encodeURIComponent(avatarUrl)}`
     );
@@ -123,7 +126,7 @@ const Home = () => {
                   </button>
                   <button
                     onClick={handleRemoveImage}
-                    className="text-sm bg-neutral-600 text-white px-5 py-1 hover:undeline"
+                    className="text-sm bg-neutral-600 text-white px-5 py-1 hover:underline"
                   >
                     Remove
                   </button>
@@ -171,6 +174,7 @@ const Home = () => {
                 className="text-neutral-200 text-sm md:text-base indent-3 focus:outline-none bg-transparent h-10 rounded-lg border border-gray-500"
                 type="text"
                 value={fullName}
+                placeholder="Full Name"
                 onChange={(e) => setFullName(e.target.value)}
               />
             </div>
